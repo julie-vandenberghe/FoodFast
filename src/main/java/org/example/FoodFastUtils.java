@@ -1,0 +1,23 @@
+package org.example;
+
+public class FoodFastUtils {
+    public static String deliveryPlanner(int n) {
+        if (n % 3 == 0 && n % 5 == 0) {
+            return "FizzBuzz";
+        } else if (n % 3 == 0) {
+            return "Fizz";
+        } else if (n % 5 == 0) {
+            return "Buzz";
+        } else { // si n n’est pas multiple de 3 ou 5, on retourne la string de n
+            return String.valueOf(n);
+        }
+    }
+
+    public static boolean isLeapYear(int year) {
+        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
