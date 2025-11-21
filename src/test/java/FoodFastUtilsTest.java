@@ -30,4 +30,22 @@ public class FoodFastUtilsTest {
         assertFalse(FoodFastUtils.isLeapYear(2025));
     }
 
+    @Test
+    void sumUpToTest() {
+        // 1) définir n
+        var n3 = 3;
+        // 2) appeler sumUpTo avec n
+        int resultat3 = FoodFastUtils.sumUpTo(n3);
+        // 3) assertEquals(6, résultat3)
+        assertEquals(6, resultat3);
+
+        // 1) définir n
+        var n5 = 5;
+        // 2) appeler sumUpTo avec n
+        int resultat5 = FoodFastUtils.sumUpTo(n5);
+        // 3) assertEquals(6, résultat3)
+        assertEquals(15, resultat5);
+
+    }
+
 }
