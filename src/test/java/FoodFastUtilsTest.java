@@ -45,7 +45,17 @@ public class FoodFastUtilsTest {
         int resultat5 = FoodFastUtils.sumUpTo(n5);
         // 3) assertEquals(6, résultat3)
         assertEquals(15, resultat5);
+    }
 
+    @Test
+    void anonymizeTest() {
+        var name = "Julie";
+        String result = FoodFastUtils.anonymize(name);
+        assertEquals("eiluJ", result);
+
+        var name2 = "12345";
+        String result2 = FoodFastUtils.anonymize(name2);
+        assertEquals("54321", result2);
     }
 
 }
