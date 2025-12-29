@@ -18,8 +18,8 @@ public class Dish {
         return name;
     }
 
-    public String getPrice() {
-        return price.toString();
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public String getSize() {
