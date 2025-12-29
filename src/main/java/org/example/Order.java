@@ -1,5 +1,6 @@
 package org.example;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
@@ -40,7 +41,14 @@ public class Order {
         return orderDate;
     }
 
-    public BigDecimal calculateTotalPrice(Order order) {
-
+    public BigDecimal calculateTotalPrice() {
+        BigDecimal total = new BigDecimal("0");
+        for (Map.Entry<Dish,Integer> entry : dishes.entrySet()) { // Parcours des paires clé-valeur
+            BigDecimal prix = entry.getKey().getPrice();
+            BigDecimal quantite = BigDecimal.valueOf(entry.getValue());
+            BigDecimal sousTotal = prix.multiply(quantite);
+            total = total.add(sousTotal);
+        }
+        return total;
     }
 }
