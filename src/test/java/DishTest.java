@@ -2,9 +2,8 @@ import org.example.Dish;
 import org.example.DishSize;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DishTest {
 
@@ -25,8 +24,8 @@ public class DishTest {
         Dish d2 = new Dish("Pizza", new BigDecimal("12.50"), DishSize.SMALL);
         Dish d3 = new Dish("Pizza", new BigDecimal("12.50"), DishSize.LARGE);
         // 2) assertTrue/False
-        assertTrue(d1.equals(d2));
-        assertFalse(d1.equals(d3));
+        assertEquals(d1, d2);
+        assertNotEquals(d1, d3);
     }
 
     @Test
