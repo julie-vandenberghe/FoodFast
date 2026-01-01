@@ -12,7 +12,14 @@ public class DeliveryPlatform {
     }
 
     public void placeOrder(Order order) {
-        orders.put(order.getId(), order);
+        try {
+            Restaurant restaurant = new Restaurant();
+            restaurant.prepare(order);
+            orders.put(order.getId(), order);
+        }
+        catch (OrderPreparationException e) {
+            order.setStatus(OrderStatus.CANCELLED);
+        }
     };
 
     public Optional<Order> findOrderById(String orderId) {
@@ -24,7 +31,7 @@ public class DeliveryPlatform {
         return orders.values().stream().filter(o -> o.getCustomer().equals(customer)).collect(Collectors.toList());
     }
 
-    List<Order> findOrdersByStatus(OrderStatus status) {
-        return orders.values().stream().filter(o -> o.getOrderStatus().equals(status)).collect(Collectors.toList());
+    public List<Order> findOrdersByStatus(OrderStatus status) {
+        return orders.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
     }
 }

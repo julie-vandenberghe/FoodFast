@@ -25,7 +25,11 @@ public class Order {
         return id;
     }
 
-    public OrderStatus getOrderStatus() {
+    public void setStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public OrderStatus getStatus() {
         return orderStatus;
     }
 

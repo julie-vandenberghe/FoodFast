@@ -57,4 +57,16 @@ public class DeliveryPlatformTest {
 
     }
 
+    @Test
+    void prepareOrderTest() {
+        DeliveryPlatform platform = new DeliveryPlatform();
+        Dish d1 = new Dish("Pizza", new BigDecimal("10"), DishSize.SMALL);
+        HashMap<Dish, Integer> dishes = new HashMap<>();
+        dishes.put(d1, 1);
+        Customer c1 = new Customer("1", "Julie", "5 rue Victor Hugo, Marquette-lez-Lille");
+        Order order = new Order(dishes, c1);
+        platform.placeOrder(order);
+        List authorizedStatus = List.of(OrderStatus.PENDING, OrderStatus.IN_PREPARATION, OrderStatus.COMPLETED, OrderStatus.CANCELLED);
+        assertTrue(authorizedStatus.contains(order.getStatus()));
+    }
 }
