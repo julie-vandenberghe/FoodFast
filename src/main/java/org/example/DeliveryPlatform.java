@@ -1,17 +1,17 @@
 package org.example;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class DeliveryPlatform {
-    private Map<String, Order> orders = new HashMap<>();
+    private Map<String, Order> orders = new ConcurrentHashMap<>();
 
     public DeliveryPlatform() {
     }
 
-    public void placeOrder(Order order) {
+    public synchronized void placeOrder(Order order) {
         try {
             Restaurant restaurant = new Restaurant();
             restaurant.prepare(order);
@@ -33,5 +33,9 @@ public class DeliveryPlatform {
 
     public List<Order> findOrdersByStatus(OrderStatus status) {
         return orders.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    public int getOrderCount() {
+        return orders.size();
     }
 }

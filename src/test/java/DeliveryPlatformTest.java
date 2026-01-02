@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,4 +73,5 @@ public class DeliveryPlatformTest {
         List authorizedStatus = List.of(OrderStatus.PENDING, OrderStatus.IN_PREPARATION, OrderStatus.COMPLETED, OrderStatus.CANCELLED);
         assertTrue(authorizedStatus.contains(order.getStatus()));
     }
+
 }
