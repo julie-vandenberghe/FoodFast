@@ -24,15 +24,15 @@ public class FoodFastUtils {
     public static int sumUpTo(int n) {
         int result = 0;
         for (int i = 1; i <= n; i++) {
-            result += i;
+            result += i; // raccourci pour result = result + i
         }
         return result;
     }
 
     public static String anonymize(String text) {
         String reversed = "";
-        for (int i = text.length() - 1;  i >= 0; i--) {
-            reversed += text.charAt(i);
+        for (int i = text.length() - 1;  i >= 0; i--) { // boucle de la fin vers le début du texte
+            reversed += text.charAt(i); // renvoie le caractère à l’indice i ds la chaîne
         }
         return reversed;
 
