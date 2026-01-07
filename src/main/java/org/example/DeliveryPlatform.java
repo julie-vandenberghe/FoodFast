@@ -21,10 +21,11 @@ public class DeliveryPlatform {
             restaurant.prepare(order);
             orders.put(order.getId(), order);
             saveOrderToDB(order); // Sauvegarde en bdd seulement si succès
+            Logger.getInstance().log("Commande créée : " + order.getId()); // on log la création de cmd
         }
         catch (OrderPreparationException e) {
             order.setStatus(OrderStatus.CANCELLED);
-            System.out.println("Commande annulée : " + e.getMessage());
+            Logger.getInstance().log("Commande annulée : " + e.getMessage() + " pour l'order " + order.getId());
         }
     };
 
