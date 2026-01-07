@@ -4,7 +4,7 @@
 
 ### Question 1 : "Hello, FoodFast!"
 Pour exécuter la classe Application avec des arguments : dans IntelliJ, cliquez sur Run > Edit Configurations.
-Et dans le champ sous Build and run, mettre par exemple : Julie test 123
+Et dans le champ sous Build and run, mettre par exemple : Julie test 123. 
 Ou alors, directement en ligne de commande depuis un terminal lancé à la racine du projet , taper `java -cp target/classes org.example.Application Julie test 123`.
 
 ### Question 2 : "Utilitaires de Logique Métier" (avec TDD)
@@ -28,7 +28,8 @@ Exemple de structure d'un test :
 - `Dish`, `Customer` et `Order` sont les objets principaux de FoodFast. Les attributs (par exemple name, price, size pour `Dish`) sont déclarés privés et les getters publics (par exemple getName(), getPrice(), getSize() pour `Dish`) permettent d’y accéder depuis l’extérieur (ce qui permet de protéger les données internes).
 - `equals()` permet de comparer deux objets Dish sur leur contenu (nom, prix, taille) plutôt que sur leur référence mémoire. `hashCode()` permet de garantir que les objets égaux (`equals`) seront correctement gérés dans les collections basées sur des tables de hachage (HashMap, HashSet).
 - `DishSize` et `OrderStatus` sont des enum pour les tailles de plats et les statuts de commande afin d’éviter les valeurs invalides.
-- 
+
+
 ### Question 5 : "La plateforme de livraison"
 La classe `DeliveryPlatform` est responsable de l’orchestration des commandes. Elle utilise une Map<String, Order> pour stocker toutes les commandes en cours, avec l’ID de la commande comme clé pour un accès rapide. Méthodes principales :
 - `void placeOrder(Order order)` → ajoute une commande à la plateforme. Pour la gestion des erreurs, voir Question 7.
@@ -45,6 +46,44 @@ Dans DeliveryPlatform, nous avons ajouté des méthodes pour rechercher facileme
 ### Question 7 : "Gestion des erreurs de préparation"
 `Restaurant.prepare(order)` peut lancer une exception `OrderPreparationException` (20% de chance).
 Si l’exception est levée, son statut passe à CANCELLED et on affiche un message.
+
+## Partie 4 : Concurrence et Persistance (Séance 4)
+
+### Question 8 : "Montée en charge (concurrence)"
+
+### Question 9 : "Persistance en base de données (JDBC)"
+Pour sauvegarder les commandes, `DeliveryPlatform` utilise JDBC pour se connecter à une base PostgreSQL.
+L’URL de connexion, l’utilisateur et le mot de passe sont définis via des variables d’environnement.
+Un fichier `.env.example` est fourni pour que vous puissiez voir la structure et les noms des variables attendues et créer votre propre .env local avec vos valeurs.
+
+J’ai utilisé Docker Compose pour lancer la base PostgreSQL facilement.
+
+Pour démarrer la base de données :
+```bash
+docker compose up -d
+```
+
+Pour vérifier que le conteneur tourne :
+```bash
+docker ps
+```
+
+Pour se connecter à la base et exécuter des requêtes SQL :
+```bash
+docker exec -it foodfast-db psql -U VOTRE_UTILISATEUR -d VOTRE_BASE_DE_DONNEES
+```
+
+Exemple pour lister les commandes :
+```sql
+SELECT * FROM orders;
+```
+
+**Discussion Sécurité** : `PreparedStatement` prévient les **injections SQL** par rapport à une concaténation de `String`.
+Exemple de ce qu’il ne faut pas faire : 
+```sql
+String sql = "INSERT INTO orders (customer_name) VALUES ('" + order.getCustomer().getName() + "')";
+```
+Si le nom contient des caractères spéciaux ou du code SQL, cela pourrait corrompre la base ou créer une faille. Avec `PreparedStatement`, tout est échappé automatiquement.
 
 
 
