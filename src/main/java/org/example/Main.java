@@ -36,7 +36,6 @@ public class Main {
         }
 
         executor.shutdown(); // plus de nouvelles tâches acceptées
-        executor.awaitTermination(5, TimeUnit.SECONDS);
 
     }
 }
