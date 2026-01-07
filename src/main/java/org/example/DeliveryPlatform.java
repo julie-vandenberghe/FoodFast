@@ -20,9 +20,11 @@ public class DeliveryPlatform {
             Restaurant restaurant = new Restaurant();
             restaurant.prepare(order);
             orders.put(order.getId(), order);
+            saveOrderToDB(order); // Sauvegarde en bdd seulement si succès
         }
         catch (OrderPreparationException e) {
             order.setStatus(OrderStatus.CANCELLED);
+            System.out.println("Commande annulée : " + e.getMessage());
         }
     };
 
@@ -45,9 +47,13 @@ public class DeliveryPlatform {
 
     public void saveOrderToDB(Order order) {
         // 1) Définir l'URL, user, password
-        String url = System.getenv("DB_URL");
-        String user = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASSWORD");
+        String user = System.getenv("POSTGRES_USER");
+        String password = System.getenv("POSTGRES_PASSWORD");
+        String host = System.getenv("POSTGRES_HOST");
+        String port = System.getenv("POSTGRES_PORT");
+        String db = System.getenv("POSTGRES_DB");
+        String url = "jdbc:postgresql://" + host + ":" + port + "/" + db;
+
 
         // 2) SQL avec PreparedStatement
         String sql = "INSERT INTO orders (id, customer_name, status, order_date, total_price) VALUES (?, ?, ?, ?, ?)";
