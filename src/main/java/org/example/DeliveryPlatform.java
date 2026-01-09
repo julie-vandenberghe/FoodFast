@@ -20,12 +20,15 @@ public class DeliveryPlatform {
             Restaurant restaurant = new Restaurant();
             restaurant.prepare(order);
             orders.put(order.getId(), order);
-            saveOrderToDB(order); // Sauvegarde en bdd seulement si succès
             Logger.getInstance().log("Commande créée : " + order.getId()); // on log la création de cmd
         }
         catch (OrderPreparationException e) {
             order.setStatus(OrderStatus.CANCELLED);
+            orders.put(order.getId(), order);
             Logger.getInstance().log("Commande annulée : " + e.getMessage() + " pour l'order " + order.getId());
+        } 
+        finally { 
+            saveOrderToDB(order); // On sauvegarde en bdd dans tous les cas (même si annulée)
         }
     };
 
