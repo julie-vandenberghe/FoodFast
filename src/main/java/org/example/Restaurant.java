@@ -8,6 +8,7 @@ public class Restaurant {
         Random random = new Random();
         double chance = random.nextDouble(); // entre 0.0 et 1.0
         if (chance < 0.2) {
+            // le statut CANCELLED sera défini dans le catch de placeOrder()
             throw new OrderPreparationException("La préparation a échoué !");
         } else {
             order.setStatus(OrderStatus.IN_PREPARATION);
