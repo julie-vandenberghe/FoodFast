@@ -62,6 +62,7 @@ FoodFast/
 ├── src/main/java/org/example/    # Code source principal
 ├── src/test/java/                # Tests unitaires
 ├── init/                         # Script d'initialisation BDD
+├── .env.example                  # Exemple de fichier d'environnement
 ├── compose.yml                   # Docker Compose (PostgreSQL)
 ├── pom.xml                       # Configuration Maven
 └── README.md                     # Ce fichier
