@@ -46,12 +46,19 @@ public class Main {
         for (int i = 0; i < orders.size(); i++) {
             Order currentOrder = orders.get(i);
             executor.submit(() -> platform.placeOrder(currentOrder));
-            logger.log("  → Commande " + currentOrder.getId() + " placée par " + currentOrder.getCustomer().getName());
         }
 
         executor.shutdown(); // plus de nouvelles tâches acceptées
         executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS);
-        logger.log("✅ Toutes les commandes ont été traitées.\n");
+
+        // On affiche le récap une fois que toutes les commandes ont été traitées
+        logger.log("📋 Récapitulatif des commandes :");
+        for (int i = 0; i < orders.size(); i++) {
+            Order currentOrder = orders.get(i);
+            String emoji = currentOrder.getStatus() == OrderStatus.CANCELLED ? "❌" : "✅";
+            logger.log("  " + emoji + " Commande " + currentOrder.getId() + " (" + currentOrder.getCustomer().getName() + ") : " + currentOrder.getStatus());
+        }
+        logger.log("  → Toutes les commandes ont été traitées.\n");
 
         // 4. Recherche par client
         logger.log("🔍 Recherche des commandes de Julie Dupont :");
