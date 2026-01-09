@@ -59,9 +59,9 @@ public class Main {
         logger.log("  → Nombre de commandes trouvées : " + julieOrders.size() + "\n");
 
         // 5. Recherche par statut
-        logger.log("🔍 Recherche des commandes en cours de préparation (IN_PREPARATION):");
-        List<Order> pendingOrders = platform.findOrdersByStatus(OrderStatus.IN_PREPARATION);
-        logger.log("  → Nombre de commandes trouvées : " + pendingOrders.size() + "\n");
+        logger.log("🔍 Recherche des commandes en cours de préparation (CANCELLED):");
+        List<Order> cancelledOrders = platform.findOrdersByStatus(OrderStatus.CANCELLED);
+        logger.log("  → Nombre de commandes trouvées : " + cancelledOrders.size() + "\n");
 
         // 6. Recherche par ID
         logger.log("🔍 Recherche d'une commande spécifique (ID: " + order1.getId() + "):");
@@ -70,18 +70,12 @@ public class Main {
             logger.log("  → Commande trouvée : " + foundOrder.get().getId() + " - Statut: " + foundOrder.get().getStatus() + "\n");
         }
 
-        // 7. Test de la préparation de commandes (qui peut échouer)
-        logger.log("👨‍🍳 Simulation de préparation des commandes :");
-        Restaurant restaurant = new Restaurant();
-        for (int i = 0; i < orders.size(); i++) {
-            Order order = orders.get(i);
-            try {
-                restaurant.prepare(order);
-                logger.log("  ✅ Commande " + order.getId() + " préparée avec succès - Statut: " + order.getStatus());
-            } catch (OrderPreparationException e) {
-               logger.log("  ❌ Commande " + order.getId() + " échouée - Statut: " + order.getStatus() + " (Exception: " + e.getMessage() + ")");
-            }
-        }
+        // 7. Test des méthodes utilitaires FoodFastUtils
+        logger.log("🛠️ Test des utilitaires (FoodFastUtils) :");
+        logger.log("  FizzBuzz(15) = " + FoodFastUtils.deliveryPlanner(15));
+        logger.log("  Est 2024 bissextile ? " + FoodFastUtils.isLeapYear(2024));
+        logger.log("  Anonymize('CUSTOMER123') = " + FoodFastUtils.anonymize("CUSTOMER123"));
+        logger.log("  SumUpTo(10) = " + FoodFastUtils.sumUpTo(10) + "\n");
 
         logger.log("=== À bientôt chez FoodFast ! (fin de démo) ===");
 
