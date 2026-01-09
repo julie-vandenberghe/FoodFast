@@ -59,15 +59,15 @@ public class Main {
         logger.log("  → Nombre de commandes trouvées : " + julieOrders.size() + "\n");
 
         // 5. Recherche par statut
-        logger.log("🔍 Recherche des commandes en attente (PENDING):");
-        List<Order> pendingOrders = platform.findOrdersByStatus(OrderStatus.PENDING);
-        logger.log("  → Nombre de commandes en attente : " + pendingOrders.size() + "\n");
+        logger.log("🔍 Recherche des commandes en cours de préparation (IN_PREPARATION):");
+        List<Order> pendingOrders = platform.findOrdersByStatus(OrderStatus.IN_PREPARATION);
+        logger.log("  → Nombre de commandes trouvées : " + pendingOrders.size() + "\n");
 
         // 6. Recherche par ID
         logger.log("🔍 Recherche d'une commande spécifique (ID: " + order1.getId() + "):");
         var foundOrder = platform.findOrderById(order1.getId());
         if (foundOrder.isPresent()) {
-            logger.log("  ✅ Commande trouvée : " + foundOrder.get().getId() + " - Statut: " + foundOrder.get().getStatus() + "\n");
+            logger.log("  → Commande trouvée : " + foundOrder.get().getId() + " - Statut: " + foundOrder.get().getStatus() + "\n");
         }
 
         // 7. Test de la préparation de commandes (qui peut échouer)
