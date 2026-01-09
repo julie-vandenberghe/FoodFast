@@ -1,64 +1,116 @@
-# README - TP : FoodFast
+# FoodFast - TP final Java
 
-## Partie 1 : Initialisation du projet et algorithmes de base (Séance 1)
+## À propos du projet
 
-### Question 1 : "Hello, FoodFast!"
-Pour exécuter la classe Application avec des arguments : dans IntelliJ, cliquez sur Run > Edit Configurations.
-Et dans le champ sous Build and run, mettre par exemple : Julie test 123. 
-Ou alors, directement en ligne de commande depuis un terminal lancé à la racine du projet , taper `java -cp target/classes org.example.Application Julie test 123`.
-
-### Question 2 : "Utilitaires de Logique Métier" (avec TDD)
-`FoodFastUtils` contient des méthodes statiques pour la logique métier : FizzBuzz, calcul d'année bissextile, somme d'entiers et anonymisation de chaînes.
-
-Chaque méthode a été développée selon l'approche TDD : les tests JUnit ont été écrits avant l'implémentation, définissant les cas d'entrée et les résultats attendus.
-
-Exemple de structure d'un test :
-1. Définir les données d'entrée
-2. Appeler la méthode à tester
-3. Vérifier le résultat attendu avec `assertEquals` ou `assertTrue` / `assertFalse`.
-
-### Question 3 : "Manipulation de données"
-- La méthode `static int sumUpTo(int n)` calcule la somme de tous les entiers de 1 à n.
-- La méthode `static String anonymize(String text)` inverse la chaîne de caractères passée en paramètre pour anonymiser un ID.
+Application Java simulant la prise, la préparation et la persistance de commandes, réalisé dans le cadre du cours "Programmation par composant 1" du Master 1 CYBER. 
 
 
-## Partie 2 : Modélisation orientée objet (Séance 2)
+## Prérequis
 
-### Question 4 : "Le Cœur du système : les objets métier"
-- `Dish`, `Customer` et `Order` sont les objets principaux de FoodFast. Les attributs (par exemple name, price, size pour `Dish`) sont déclarés privés et les getters publics (par exemple getName(), getPrice(), getSize() pour `Dish`) permettent d’y accéder depuis l’extérieur (ce qui permet de protéger les données internes).
-- `equals()` permet de comparer deux objets Dish sur leur contenu (nom, prix, taille) plutôt que sur leur référence mémoire. `hashCode()` permet de garantir que les objets égaux (`equals`) seront correctement gérés dans les collections basées sur des tables de hachage (HashMap, HashSet).
-- `DishSize` et `OrderStatus` sont des enum pour les tailles de plats et les statuts de commande afin d’éviter les valeurs invalides.
+- Java 21+
+- Maven (dépendances : junit-jupiter pour les tests et postgresql pour la base de donnéees)
+- Docker (pour la base PostgreSQL avec Docker Compose)
+- Variables d'environnement pour la BDD (voir section "Base de données")
+
+## Démarrage rapide
+### Compilation
+```bash
+mvn clean package
+```
+
+### Exécution des tests
+```bash
+mvn test
+```
+
+### Démarrer la base de données PostgreSQL
+```bash
+docker compose up -d
+```
+
+### Lancement de l'application
+- Point d'entrée principal : `Main`
+```bash
+java -cp target/classes org.example.Main
+```
+
+- Classe `Application` (démonstration avec arguments - question 1) :
+```bash
+java -cp target/classes org.example.Application [arg1] [arg2] [arg3]
+```
 
 
-### Question 5 : "La plateforme de livraison"
-La classe `DeliveryPlatform` est responsable de l’orchestration des commandes. Elle utilise une Map<String, Order> pour stocker toutes les commandes en cours, avec l’ID de la commande comme clé pour un accès rapide. Méthodes principales :
-- `void placeOrder(Order order)` → ajoute une commande à la plateforme. Pour la gestion des erreurs, voir Question 7.
-- `Optional<Order> findOrderById(String orderId)` → récupère une commande par son ID, renvoie Optional pour gérer le cas où aucune commande ne correspond à l’ID fourni (sans risque de NullPointerException).
+## Roadmap
+
+- [x] Question 1 : Hello, FoodFast!
+- [x] Question 2 : Utilitaires de Logique Métier (avec TDD)
+- [x] Question 3 : Manipulation de données
+- [x] Question 4 : Le cœur du système : les objets métier
+- [x] Question 5 : La plateforme de livraison
+- [x] Question 6 : Recherche avancée de commandes
+- [x] Question 7 : Gestion des erreurs de préparation
+- [x] Question 8 : Montée en charge (concurrence)
+- [x] Question 9 : Persistance en base de données (JDBC) 
+- [x] Question 10 : Journalisation des événements (Bonus)
 
 
-## Partie 3 : Logique applicative et robustesse (Séance 3)
+## Organisation du projet
 
-### Question 6 : "Recherche avancée de commandes"
-Dans DeliveryPlatform, nous avons ajouté des méthodes pour rechercher facilement les commandes :
-- `findOrdersByCustomer(Customer customer)` → Retourne la liste de toutes les commandes passées par un client donné. Utilise l’API Stream pour filtrer la Map des commandes et collecter les résultats dans une List<Order>.
-- `findOrdersByStatus(OrderStatus status)` → Retourne la liste de toutes les commandes correspondant à un statut précis (PENDING, IN_PREPARATION, etc.). Même logique avec Stream + filtre + collect.
+Le projet est structuré comme suit :
+```
+FoodFast/
+├── src/main/java/org/example/    # Code source principal
+├── src/test/java/                # Tests unitaires
+├── init/                         # Script d'initialisation BDD
+├── compose.yml                   # Docker Compose (PostgreSQL)
+├── pom.xml                       # Configuration Maven
+└── README.md                     # Ce fichier
+```
 
-### Question 7 : "Gestion des erreurs de préparation"
-`Restaurant.prepare(order)` peut lancer une exception `OrderPreparationException` (20% de chance).
-Si l’exception est levée, son statut passe à CANCELLED et on affiche un message.
+### Composants principaux
+| Classe | Rôle |
+|--------|------|
+| `FoodFastUtils` | Utilitaires métier (FizzBuzz, bissextile, anonymisation) |
+| `Order` | Représente une commande (id, client, statut, timestamp) |
+| `Dish` | Représente un plat (nom, prix, taille) |
+| `Customer` | Représente un client (nom, email) |
+| `DishSize` / `OrderStatus` | Énums pour valeurs contrôlées |
+| `DeliveryPlatform` | Orchestre les commandes (placement, recherche, persistance JDBC) |
+| `Restaurant` | Simule la préparation d'une commande (peut échouer) |
+| `OrderPreparationException` | Exception personnalisée levée lors d'un échec de préparation |
+| `Logger` | Journalisation (pattern Singleton) |
 
-## Partie 4 : Concurrence et Persistance (Séance 4)
 
-### Question 8 : "Montée en charge (concurrence)"
+### Tests
 
-### Question 9 : "Persistance en base de données (JDBC)"
-Pour sauvegarder les commandes, `DeliveryPlatform` utilise JDBC pour se connecter à une base PostgreSQL.
-L’URL de connexion, l’utilisateur et le mot de passe sont définis via des variables d’environnement.
-Un fichier `.env.example` est fourni pour que vous puissiez voir la structure et les noms des variables attendues et créer votre propre .env local avec vos valeurs.
+- Projet réalisé selon l'approche TDD : les tests JUnit ont été écrits avant l'implémentation du code.
+- Tests unitaires fournis : DishTest, FoodFastUtilsTest, DeliveryPlatformTest.
+- Exemple de structure d'un test :
+  1. Définir les données d'entrée
+  2. Appeler la méthode à tester
+  3. Vérifier le résultat attendu (avec `assertEquals` ou `assertTrue` / `assertFalse`)
 
+Pour exécuter les tests :
+```bash
+mvn test
+```
+
+### Base de données
+La base de données PostgreSQL est utilisée pour persister les commandes.
+Les variables d'environnement suivantes doivent être définies pour la connexion JDBC :
+- `DB_URL` : URL de connexion JDBC (ex: `jdbc:postgresql://localhost:5432/foodfast`)
+- `DB_USER` : Nom d'utilisateur de la base
+- `DB_PASSWORD` : Mot de passe de la base
+Configuration Base de données
+
+Un fichier .env.example est fourni. Le copier et remplir pour obtenir votre .env local.
+
+
+### Docker Compose
 J’ai utilisé Docker Compose pour lancer la base PostgreSQL facilement.
+Il lance automatiquement un script SQL d'initialisation (init-bdd.sql).
 
-Pour démarrer la base de données :
+Pour démarrer la base de données PostgreSQL avec Docker Compose :
 ```bash
 docker compose up -d
 ```
@@ -78,16 +130,20 @@ Exemple pour lister les commandes :
 SELECT * FROM orders;
 ```
 
-**Discussion Sécurité** : `PreparedStatement` prévient les **injections SQL** par rapport à une concaténation de `String`.
+## Discussions
+### Question 8 : Sécurité et TOCTOU (Time-of-check to Time-of-use)
+Une *race condition* peut devenir une faille de sécurité de type **TOCTOU** lorsqu'un état vérifié (check) est modifié par un autre thread avant son utilisation (use). Par exemple, si un thread vérifie qu'une commande peut être modifiée (check) puis, avant de la modifier (use), un autre thread change l'état de cette commande, cela peut conduire à des actions non autorisées ou incohérentes. Pour éviter cela, on utilise utiliser des structures de données thread-safe comme `ConcurrentHashMap` et on synchronise les accès aux ressources partagées.
+
+### Question 9 : Sécurité et injections SQL avec PreparedStatement
+`PreparedStatement` prévient les **injections SQL** par rapport à une concaténation de `String`.
 Exemple de ce qu’il ne faut pas faire : 
 ```sql
 String sql = "INSERT INTO orders (customer_name) VALUES ('" + order.getCustomer().getName() + "')";
 ```
+
 Si le nom contient des caractères spéciaux ou du code SQL, cela pourrait corrompre la base ou créer une faille. Avec `PreparedStatement`, tout est échappé automatiquement.
 
-
-
-
-
-
-
+### Question 10 : Limites du pattern Singleton et alternatives modernes :
+  - état global → difficile à tester
+  - rigide → difficile à changer l’implémentation (ex. logger vers un fichier ou un serveur)
+  - Alternatives modernes : Injection de dépendances (avec Spring par exemple) pour injecter un logger configurable et testable, Enum Singleton (thread-safe, sérialisation sûre)
